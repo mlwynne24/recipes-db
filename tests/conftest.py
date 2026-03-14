@@ -50,7 +50,8 @@ def sample_recipe_html():
     <script type="application/ld+json">
     {"@type":"Recipe","name":"Spaghetti Carbonara","description":"A classic Roman pasta dish.",
     "recipeIngredient":["200g spaghetti","2 large eggs","100g pancetta"],
-    "recipeInstructions":[{"@type":"HowToStep","text":"Cook pasta."},{"@type":"HowToStep","text":"Fry pancetta."}],
+    "recipeInstructions":[{"@type":"HowToStep","text":"Cook pasta."},
+    {"@type":"HowToStep","text":"Fry pancetta."}],
     "prepTime":"PT10M","cookTime":"PT20M","recipeYield":"2 servings","keywords":"pasta,italian"}
     </script>
     </head><body><h1>Spaghetti Carbonara</h1></body></html>

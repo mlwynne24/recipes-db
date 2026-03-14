@@ -76,7 +76,9 @@ async def scrape_url(url: str, session: Session) -> Recipe | None:
     return recipe
 
 
-async def scrape_collection(collection_url: str, session: Session, max_pages: int = 50) -> list[Recipe]:
+async def scrape_collection(
+    collection_url: str, session: Session, max_pages: int = 50
+) -> list[Recipe]:
     """Paginate through a collection URL, scraping all recipes found."""
     recipe_urls: list[str] = []
     page_url: str | None = collection_url

@@ -49,7 +49,9 @@ def test_upsert_updates_existing_recipe(db_session, sample_scraped):
     assert recipe2.id == recipe1.id
     assert recipe2.title == "Updated Recipe"
 
-    ingredients = db_session.exec(select(Ingredient).where(Ingredient.recipe_id == recipe2.id)).all()
+    ingredients = db_session.exec(
+        select(Ingredient).where(Ingredient.recipe_id == recipe2.id)
+    ).all()
     assert len(ingredients) == 1
     assert ingredients[0].quantity == "300"
 

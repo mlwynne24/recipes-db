@@ -19,7 +19,9 @@ def main() -> None:
 
     with Session(engine) as session:
         if args.sql_only or not args.query:
-            recipes = sql_search(session, ingredient_filter=args.ingredient, tag_filter=args.tag, limit=args.k)
+            recipes = sql_search(
+                session, ingredient_filter=args.ingredient, tag_filter=args.tag, limit=args.k
+            )
             for r in recipes:
                 print(f"{r.title}")
                 print(f"  {r.url}")

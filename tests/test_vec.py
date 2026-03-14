@@ -4,7 +4,13 @@ import pytest
 
 from src.config.settings import settings
 from src.db.models import Recipe
-from src.db.vec import delete_embedding, insert_embedding, knn_search, recipe_ids_with_embeddings, serialize_float32
+from src.db.vec import (
+    delete_embedding,
+    insert_embedding,
+    knn_search,
+    recipe_ids_with_embeddings,
+    serialize_float32,
+)
 
 
 def _make_recipe(session, title: str, url: str) -> Recipe:

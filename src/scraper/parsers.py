@@ -56,7 +56,9 @@ def normalize_ingredient_name(text: str) -> str:
     tokens = [t for t in tokens if t not in _STRIP_WORDS]
     text = " ".join(tokens)
     # Naive singularization for common endings
-    for suffix, replacement in [("atoes", "ato"), ("ies", "y"), ("ves", "f"), ("ses", "s"), ("s", "")]:
+    for suffix, replacement in [
+        ("atoes", "ato"), ("ies", "y"), ("ves", "f"), ("ses", "s"), ("s", "")
+    ]:
         if text.endswith(suffix) and len(text) > len(suffix) + 2:
             candidate = text[: -len(suffix)] + replacement
             if len(candidate) >= 3:

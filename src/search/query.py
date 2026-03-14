@@ -5,7 +5,7 @@ from sqlmodel import Session, select
 
 from src.config.settings import settings
 from src.db.models import Ingredient, Recipe
-from src.db.vec import knn_search, serialize_float32
+from src.db.vec import knn_search
 from src.embeddings.voyage import embed_query
 
 
@@ -42,7 +42,10 @@ def hybrid_search(
     params: dict = {}
 
     if ingredient_filter:
-        conditions.append("EXISTS (SELECT 1 FROM ingredients i WHERE i.recipe_id = r.id AND i.name LIKE :ingredient)")
+        conditions.append(
+            "EXISTS (SELECT 1 FROM ingredients i "
+            "WHERE i.recipe_id = r.id AND i.name LIKE :ingredient)"
+        )
         params["ingredient"] = f"%{ingredient_filter.lower()}%"
 
     if tag_filter:
@@ -62,7 +65,9 @@ def hybrid_search(
         recipe = session.get(Recipe, recipe_id)
         if recipe is None:
             continue
-        ingredients = list(session.exec(select(Ingredient).where(Ingredient.recipe_id == recipe_id)).all())
+        ingredients = list(
+            session.exec(select(Ingredient).where(Ingredient.recipe_id == recipe_id)).all()
+        )
         results.append(SearchResult(recipe=recipe, distance=distance, ingredients=ingredients))
         if len(results) >= k:
             break
@@ -82,7 +87,8 @@ def sql_search(
 
     if ingredient_filter:
         conditions.append(
-            "EXISTS (SELECT 1 FROM ingredients i WHERE i.recipe_id = r.id AND i.name LIKE :ingredient)"
+            "EXISTS (SELECT 1 FROM ingredients i "
+            "WHERE i.recipe_id = r.id AND i.name LIKE :ingredient)"
         )
         params["ingredient"] = f"%{ingredient_filter.lower()}%"
 
