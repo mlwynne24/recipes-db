@@ -11,9 +11,11 @@ def serialize_float32(vec: list[float]) -> bytes:
 
 def insert_embedding(session: Session, recipe_id: int, embedding: list[float]) -> None:
     serialized = serialize_float32(embedding)
+    # vec0 virtual tables don't support INSERT OR REPLACE — delete first
+    session.execute(text("DELETE FROM recipe_embeddings WHERE recipe_id = :id"), {"id": recipe_id})
     session.execute(
         text(
-            "INSERT OR REPLACE INTO recipe_embeddings(recipe_id, embedding) "
+            "INSERT INTO recipe_embeddings(recipe_id, embedding) "
             "VALUES (:recipe_id, :embedding)"
         ),
         {"recipe_id": recipe_id, "embedding": serialized},

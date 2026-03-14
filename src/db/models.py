@@ -39,4 +39,4 @@ class Ingredient(SQLModel, table=True):
     unit: str | None = None
     original_text: str
 
-    recipe: "Recipe | None" = Relationship(back_populates="ingredients")
+    recipe: Recipe | None = Relationship(back_populates="ingredients")
