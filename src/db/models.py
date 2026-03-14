@@ -1,5 +1,5 @@
 import json
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 
 from sqlmodel import Field, Relationship, SQLModel
 
@@ -18,6 +18,7 @@ class Recipe(SQLModel, table=True):
     serves: str | None = None
     scraped_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
     tried: bool = Field(default=False)
+    tried_on: date | None = Field(default=None)
     review: float | None = Field(default=None, ge=0, le=10)
     comments: str | None = None
 
