@@ -17,6 +17,9 @@ class Recipe(SQLModel, table=True):
     cook_time: str | None = None
     serves: str | None = None
     scraped_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    tried: bool = Field(default=False)
+    review: float | None = Field(default=None, ge=0, le=10)
+    comments: str | None = None
 
     ingredients: list["Ingredient"] = Relationship(back_populates="recipe")
 

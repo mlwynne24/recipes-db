@@ -7,7 +7,9 @@ from src.config.settings import settings
 
 
 def _load_sqlite_vec(dbapi_conn, _connection_record):
+    dbapi_conn.enable_load_extension(True)
     sqlite_vec.load(dbapi_conn)
+    dbapi_conn.enable_load_extension(False)
 
 
 def make_engine() -> Engine:

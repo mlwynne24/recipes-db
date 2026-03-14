@@ -41,7 +41,10 @@ def run_migrations_online() -> None:
     connectable = engine_from_config(cfg, prefix="sqlalchemy.", poolclass=pool.NullPool)
 
     with connectable.connect() as connection:
-        sqlite_vec.load(connection.connection.driver_connection)
+        raw_conn = connection.connection.driver_connection
+        raw_conn.enable_load_extension(True)
+        sqlite_vec.load(raw_conn)
+        raw_conn.enable_load_extension(False)
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
