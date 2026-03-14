@@ -1,5 +1,5 @@
 [project]
-name = "recipes-ai"
+name = "recipes-db"
 version = "0.1.0"
 description = "BBC Good Food recipe scraper and semantic search"
 readme = "README.md"

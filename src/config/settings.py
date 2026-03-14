@@ -6,7 +6,7 @@ class Settings(BaseSettings):
 
     database_path: str = "data/recipes.db"
 
-    voyage_api_key: str = ""
+    voyage_api_key: str
     voyage_model: str = "voyage-3.5-lite"
     embedding_dimension: int = 1024
 
