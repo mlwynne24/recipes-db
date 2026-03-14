@@ -167,10 +167,12 @@ def parse_recipe_page(html: str, url: str) -> ScrapedRecipe | None:
         method = _instructions_to_text(ld.get("recipeInstructions"))
         keywords = ld.get("keywords") or ""
         tags = [k.strip() for k in keywords.split(",") if k.strip()] if keywords else []
-        # Also grab category
-        category = ld.get("recipeCategory")
-        if category and category not in tags:
-            tags.insert(0, category)
+        # recipeCategory may be a comma-separated string like "Dinner, Main course"
+        category_raw = ld.get("recipeCategory") or ""
+        for cat in category_raw.split(","):
+            cat = cat.strip()
+            if cat and cat not in tags:
+                tags.append(cat)
     else:
         # DOM fallback
         h1 = soup.select_one("h1")
