@@ -3,7 +3,7 @@ name = "recipes-db"
 version = "0.1.0"
 description = "BBC Good Food recipe scraper and semantic search"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = "==3.13.*"
 dependencies = [
     "pre-commit>=4.2.0",
     "sqlmodel>=0.0.22",
@@ -13,6 +13,7 @@ dependencies = [
     "voyageai>=0.3.0",
     "playwright>=1.49.0",
     "beautifulsoup4>=4.12.0",
+    "numpy>=2.4.3",
 ]
 
 [project.optional-dependencies]
