@@ -6,7 +6,12 @@ from sqlmodel import Session, select
 from src.config.settings import settings
 from src.db.models import Ingredient, Recipe
 from src.scraper.browser import fetch_html, get_page
-from src.scraper.parsers import ScrapedRecipe, parse_collection_page, parse_next_page, parse_recipe_page
+from src.scraper.parsers import (
+    ScrapedRecipe,
+    parse_collection_page,
+    parse_next_page,
+    parse_recipe_page,
+)
 
 logger = logging.getLogger(__name__)
 

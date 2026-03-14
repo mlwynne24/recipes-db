@@ -39,12 +39,9 @@ async def get_page():
 
 async def fetch_html(page: Page, url: str) -> str:
     await page.goto(url, wait_until="domcontentloaded", timeout=30_000)
-    # Dismiss cookie consent if present
+    # Dismiss Sourcepoint GDPR consent modal (BBC Good Food uses CMP account 1742)
     try:
-        accept_btn = page.locator(
-            "button:has-text('Accept'), button:has-text('Accept All'), "
-            "[id*='accept'], [class*='accept-all']"
-        ).first
+        accept_btn = page.locator('button[title="Accept all"]').first
         if await accept_btn.is_visible(timeout=3_000):
             await accept_btn.click()
             await asyncio.sleep(0.5)

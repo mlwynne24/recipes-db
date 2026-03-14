@@ -174,18 +174,24 @@ def parse_recipe_page(html: str, url: str) -> ScrapedRecipe | None:
             if cat and cat not in tags:
                 tags.append(cat)
     else:
-        # DOM fallback
-        h1 = soup.select_one("h1")
+        # DOM fallback (selectors verified against live site 2026-03-14)
+        h1 = soup.select_one("h1.heading-1, h1")
         title = h1.get_text(strip=True) if h1 else ""
-        desc_el = soup.select_one('[class*="recipe__description"], [class*="recipe-description"], [class*="intro__text"]')
+        desc_el = soup.select_one(".recipe-masthead__description")
         description = desc_el.get_text(strip=True) if desc_el else None
         prep_time = cook_time = serves = method = None
         raw_ingredients = []
         tags = []
-        for li in soup.select('[class*="ingredient"]'):
+        for li in soup.select("li.ingredients-list__item"):
             text = li.get_text(strip=True)
             if text:
                 raw_ingredients.append(text)
+        steps = []
+        for li in soup.select("li.method-steps__list-item .editor-content"):
+            step = li.get_text(strip=True)
+            if step:
+                steps.append(step)
+        method = "\n\n".join(steps) if steps else None
 
     if not title:
         return None
@@ -206,21 +212,33 @@ def parse_recipe_page(html: str, url: str) -> ScrapedRecipe | None:
 
 
 def parse_collection_page(html: str, base_url: str = "https://www.bbcgoodfood.com") -> list[str]:
-    """Extract recipe URLs from a collection/category listing page."""
+    """Extract recipe URLs from a collection/category listing page.
+
+    Collection pages serve all recipes at once (~64) with no pagination.
+    For search pages (/search?q=...) use parse_next_page for pagination.
+    """
     soup = BeautifulSoup(html, "html.parser")
     urls: list[str] = []
     seen: set[str] = set()
 
-    for a in soup.find_all("a", href=True):
-        href = a["href"]
-        if "/recipes/" in href and href.count("/") >= 2:
-            # Exclude collection pages and non-recipe links
-            if "/collection/" in href or "/category/" in href:
-                continue
-            full = urljoin(base_url, href).split("?")[0].rstrip("/")
-            if full not in seen and full.startswith("https://www.bbcgoodfood.com/recipes/"):
+    # Primary: recipe cards (data-item-type="recipe" excludes sub-collection cards)
+    for card in soup.select('article.card[data-item-type="recipe"]'):
+        a = card.select_one("a[href]")
+        if a:
+            full = urljoin(base_url, a["href"]).split("?")[0].rstrip("/")
+            if full not in seen:
                 seen.add(full)
                 urls.append(full)
+
+    # Fallback: generic recipe href scan (for search pages and other layouts)
+    if not urls:
+        for a in soup.find_all("a", href=True):
+            href = a["href"]
+            if "/recipes/" in href and "/collection/" not in href and "/category/" not in href:
+                full = urljoin(base_url, href).split("?")[0].rstrip("/")
+                if full not in seen and full.startswith("https://www.bbcgoodfood.com/recipes/"):
+                    seen.add(full)
+                    urls.append(full)
 
     return urls
 
