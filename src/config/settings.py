@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     scrape_delay_seconds: float = 1.5
     scrape_batch_size: int = 50
     headless: bool = True
+    chromium_executable_path: str | None = None
 
     default_search_k: int = 10
     broad_search_k: int = 200

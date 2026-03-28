@@ -14,7 +14,10 @@ _USER_AGENT = (
 @asynccontextmanager
 async def get_browser():
     async with async_playwright() as pw:
-        browser: Browser = await pw.chromium.launch(headless=settings.headless)
+        browser: Browser = await pw.chromium.launch(
+            headless=settings.headless,
+            executable_path=settings.chromium_executable_path,
+        )
         try:
             yield browser
         finally:
